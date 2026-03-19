@@ -21,23 +21,31 @@ const TradingViewWidget = ({
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Only inject if it hasn't been injected yet to prevent duplicates
-    if (container.current && container.current.children.length === 0) {
+    if (container.current) {
       const script = document.createElement("script");
       script.src = scriptUrl;
       script.type = "text/javascript";
       script.async = true;
       script.innerHTML = JSON.stringify(config);
       container.current.appendChild(script);
-    }
-  }, [scriptUrl, config]);
 
+      return () => {
+        if (container.current) {
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          container.current.innerHTML = "";
+        }
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className={cn("w-full", className)}>
       {title && (
-        <h3 className="font-semibold text-xl text-zinc-100 mb-4 px-1">{title}</h3>
+        <h3 className="font-semibold text-xl text-zinc-100 mb-4 px-1">
+          {title}
+        </h3>
       )}
-      
+
       {/* Zero custom CSS classes. 
         Just the ref for the script, and Tailwind for styling. 
       */}

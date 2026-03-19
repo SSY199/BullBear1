@@ -42,7 +42,7 @@ export default function SignInPage() {
       
       if (res.success) {
         toast.success("Successfully signed in!");
-        router.push("/dashboard");
+        router.push("/");
       } else {
         toast.error(res.message || "Failed to sign in.");
       }

@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 import TradingViewWidget from "@/forms/TradingViewWidget";
 import { 
   CANDLE_CHART_WIDGET_CONFIG, 
@@ -7,8 +6,13 @@ import {
   COMPANY_PROFILE_WIDGET_CONFIG,
   TECHNICAL_ANALYSIS_WIDGET_CONFIG,
   COMPANY_FINANCIALS_WIDGET_CONFIG,
-  SYMBOL_NEWS_WIDGET_CONFIG
 } from "@/lib/constants";
+import WatchlistButton from "@/forms/WactchlistButton";
+import { auth } from "@/lib/better-auth/auth";
+import { headers } from "next/headers";
+import { checkIsWatched } from "@/lib/actions/watchlist.actions";
+
+
 
 export default async function StockDetailsPage({ 
   params 
@@ -20,9 +24,14 @@ export default async function StockDetailsPage({
   
   const scriptUrl = "https://s3.tradingview.com/external-embedding/";
 
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  const userId = session?.user?.id ?? "";
+  const isWatched = await checkIsWatched(userId, ticker);
+
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-100 p-4 md:p-6 pb-16">
-      <div className="max-w-[1600px] mx-auto grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div className="max-w-400 mx-auto grid grid-cols-1 xl:grid-cols-3 gap-6">
         
         {/* ======================================= */}
         {/* LEFT COLUMN (2/3 Width) - Primary Charts */}
@@ -64,11 +73,12 @@ export default async function StockDetailsPage({
         <div className="flex flex-col gap-6">
           
           {/* 1. Watchlist Button */}
-          <Button 
-            className="w-full h-14 bg-gradient-to-r from-[#FFD700] to-[#FDB931] hover:from-[#F0C800] hover:to-[#F0B800] text-black font-bold text-lg rounded-xl shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:shadow-[0_0_25px_rgba(255,215,0,0.5)] transition-all duration-300 border-0"
-          >
-            Add to Watchlist
-          </Button>
+          <WatchlistButton
+            userId={userId}
+            symbol={ticker}
+            companyName={ticker}
+            initialIsWatched={isWatched}
+          />
 
           {/* 2. Technical Analysis Gauge */}
           <div className="rounded-xl overflow-hidden border border-zinc-800/80 shadow-xl bg-[#141414]">

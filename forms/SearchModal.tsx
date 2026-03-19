@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
@@ -40,13 +41,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       setIsLoading(true);
       try {
         const apiKey = process.env.NEXT_PUBLIC_FINNHUB_API_KEY;
-        const res = await fetch(`https://finnhub.io/api/v1/search?q=${query}&token=${apiKey}`);
+        const res = await fetch(
+          `https://finnhub.io/api/v1/search?q=${encodeURIComponent(query)}&token=${apiKey}`,
+        );
         const data = await res.json();
-        
+
         // Filter for actual stocks
-        const stocks = data.result?.filter((item: any) => 
-          item.type === "Common Stock" || item.type === "ETP"
-        ) || [];
+        const stocks =
+          data.result?.filter(
+            (item: any) => item.type === "Common Stock" || item.type === "ETP",
+          ) || [];
         setResults(stocks);
       } catch (error) {
         console.error("Search failed:", error);
@@ -71,7 +75,6 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="p-0 bg-[#141414] border-zinc-800 text-zinc-100 max-w-2xl gap-0 overflow-hidden shadow-2xl rounded-xl">
-        
         {/* Accessible Title (Hidden from UI but required by Dialog) */}
         <VisuallyHidden>
           <DialogTitle>Search Stocks</DialogTitle>
@@ -87,13 +90,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             placeholder="Search stocks..."
             className="flex-1 bg-transparent border-none outline-none text-zinc-100 placeholder:text-zinc-500 text-lg"
           />
-          {isLoading && <Loader2 className="w-5 h-5 animate-spin text-zinc-500" />}
+          {isLoading && (
+            <Loader2 className="w-5 h-5 animate-spin text-zinc-500" />
+          )}
         </div>
 
         {/* Results Area */}
         <div className="max-h-[60vh] overflow-y-auto">
           <div className="px-4 py-2 text-xs font-semibold text-zinc-500 bg-[#0a0a0a]">
-            {query.trim() ? "Search Results" : `Popular stocks (${POPULAR_STOCKS.length})`}
+            {query.trim()
+              ? "Search Results"
+              : `Popular stocks (${POPULAR_STOCKS.length})`}
           </div>
 
           <div className="flex flex-col py-2">
@@ -105,7 +112,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               displayList.map((stock: any, index: number) => (
                 <button
                   key={index}
-                  onClick={() => handleSelect(stock.symbol || stock.displaySymbol)}
+                  onClick={() =>
+                    handleSelect(stock.symbol || stock.displaySymbol)
+                  }
                   className="flex flex-col text-left px-6 py-3 hover:bg-[#202020] transition-colors group outline-none focus:bg-[#202020]"
                 >
                   <div className="flex items-center gap-3">
@@ -122,7 +131,6 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             )}
           </div>
         </div>
-
       </DialogContent>
     </Dialog>
   );
