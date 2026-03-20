@@ -111,7 +111,7 @@ export const HEATMAP_WIDGET_CONFIG = {
   hasSymbolTooltip: true,
   isMonoSize: false,
   width: "100%",
-  height: "600",
+  height: 600,
 };
 
 export const TOP_STORIES_WIDGET_CONFIG = {
@@ -122,7 +122,7 @@ export const TOP_STORIES_WIDGET_CONFIG = {
   locale: "en",
   market: "stock",
   width: "100%",
-  height: "600",
+  height: 600,
 };
 
 export const MARKET_DATA_WIDGET_CONFIG = {
@@ -297,10 +297,7 @@ export const POPULAR_STOCK_SYMBOLS = [
   "AMD",
   "PYPL",
   "UBER",
-  "PYPL",
-  "UBER",
   "ZM",
-  "SPOT",
   "SPOT",
   "SQ",
   "SHOP",
@@ -316,7 +313,6 @@ export const POPULAR_STOCK_SYMBOLS = [
   "NET",
   "OKTA",
   "TWLO",
-  "ZM",
 
   // Consumer & Delivery Apps
   "DOCU",
@@ -342,7 +338,6 @@ export const POPULAR_STOCK_SYMBOLS = [
   "GRAB",
   "SE",
 ];
-
 export const NO_MARKET_NEWS =
   '<p class="mobile-text" style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#4b5563;">No market news available today. Please check back tomorrow.</p>';
 

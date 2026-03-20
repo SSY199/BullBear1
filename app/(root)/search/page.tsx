@@ -32,7 +32,7 @@ export default function SearchPage() {
       const apiKey = process.env.NEXT_PUBLIC_FINNHUB_API_KEY;
 
       const response = await fetch(
-        `https://finnhub.io/api/v1/search?q=${encodeURIComponent(query)}&token=${apiKey}`
+        `https://finnhub.io/api/v1/search?q=${encodeURIComponent(query)}&token=${apiKey}`,
       );
 
       if (!response.ok) {
@@ -44,7 +44,7 @@ export default function SearchPage() {
       const stockResults =
         data.result?.filter(
           (item: FinnhubResult) =>
-            item.type === "Common Stock" || item.type === "ETP"
+            item.type === "Common Stock" || item.type === "ETP",
         ) || [];
 
       setResults(stockResults);
@@ -63,7 +63,6 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-100 p-4 md:p-12 font-sans selection:bg-emerald-500/30">
       <div className="max-w-3xl mx-auto space-y-8 mt-10">
-        
         {/* Header */}
         <div className="text-center space-y-3">
           <h1 className="text-4xl font-bold tracking-tight text-white">
@@ -75,7 +74,10 @@ export default function SearchPage() {
         </div>
 
         {/* Search */}
-        <form onSubmit={handleSearch} className="relative flex items-center gap-3">
+        <form
+          onSubmit={handleSearch}
+          className="relative flex items-center gap-3"
+        >
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
             <Input
@@ -101,7 +103,6 @@ export default function SearchPage() {
 
         {/* Results */}
         <div className="mt-8 space-y-3">
-
           {/* ✅ FIXED LOADING BLOCK */}
           {isLoading && (
             <div className="text-center text-zinc-500 py-10">
@@ -117,7 +118,6 @@ export default function SearchPage() {
 
           {!isLoading && results.length > 0 && (
             <div className="bg-[#141414] border border-zinc-800/80 rounded-2xl overflow-hidden shadow-2xl">
-              
               <div className="px-6 py-4 border-b border-zinc-800/50 bg-[#0a0a0a]">
                 <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">
                   Search Results
@@ -126,10 +126,10 @@ export default function SearchPage() {
 
               <div className="divide-y divide-zinc-800/50">
                 {results.map((stock) => (
-                  <div
+                  <button
                     key={stock.symbol}
                     onClick={() => navigateToStock(stock.displaySymbol)}
-                    className="flex items-center justify-between p-6 hover:bg-zinc-900/50 cursor-pointer transition-colors group"
+                    className="flex items-center justify-between p-6 hover:bg-zinc-900/50 cursor-pointer transition-colors group w-full text-left"
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center group-hover:bg-emerald-500/20">
@@ -151,10 +151,9 @@ export default function SearchPage() {
                       </span>
                       <TrendingUp className="w-5 h-5 text-zinc-600 group-hover:text-emerald-500" />
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
-
             </div>
           )}
         </div>
